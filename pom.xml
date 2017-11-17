@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>17.1.1</version>
+		<relativePath />
+	</parent>
+
+	<groupId>net.preibisch</groupId>
+	<artifactId>BigStitcherMM</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>BigStitcher MicroManager</name>
+	<description>Multiview stitching of large datasets.</description>
+	<url>https://github.com/PreibischLab/bigstitcher-mm</url>
+	<inceptionYear>2017</inceptionYear>
+	<organization>
+		<name>Preibisch Lab</name>
+		<url>http://preibischlab.mdc-berlin.de</url>
+	</organization>
+	
+	<licenses>
+		<license>
+			<name>BSD 2-clause</name>
+			<url>https://opensource.org/licenses/BSD-2-Clause</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>StephanPreibisch</id>
+			<name>Stephan Preibisch</name>
+			<url>http://imagej.net/User:StephanP</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>hoerldavid</id>
+			<name>David Hoerl</name>
+			<url>http://imagej.net/User:Davidhoerl</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>nico</id>
+			<name>Nico Stuurman</name>
+			<url>http://imagej.net/User:Nico</url>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>debugger</role>
+				<role>reviewer</role>
+				<role>support</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+	</contributors>
+
+	<mailingLists>
+		<mailingList>
+			<name>ImageJ Forum</name>
+			<archive>http://forum.imagej.net/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:git://github.com/PreibischLab/bigstitcher-mm</connection>
+		<developerConnection>scm:git:git@github.com:PreibischLab/bigstitcher-mm</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/PreibischLab/bigstitcher-mm</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/PreibischLab/bigstitcher-mm/issues</url>
+	</issueManagement>
+
+	<!-- 
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/PreibischLab/BigStitcher</url>
+	</ciManagement>
+	-->
+
+	<properties>
+		<package-name>net.preibisch.stitcher</package-name>
+
+		<license.licenseName>bsd</license.licenseName>
+		<license.copyrightOwners>Big Stitcher developers.</license.copyrightOwners>
+
+		<multiview-reconstruction.version>0.1.1-SNAPSHOT</multiview-reconstruction.version>
+		<multiview-simulation.version>0.1.0</multiview-simulation.version>
+		<bigstitcher.version>0.1.1-SNAPSHOT</bigstitcher.version>
+		
+		<micromanager.plugins>/Users/david/Applications/Micro-Manager1.4/plugins/BigStitcher</micromanager.plugins>
+
+		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
+		<releaseProfiles>deploy-to-imagej</releaseProfiles>
+		
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>imagej.public</id>
+			<url>https://maven.imagej.net/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.preibisch</groupId>
+			<artifactId>BigStitcher</artifactId>
+			<version>${bigstitcher.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.preibisch</groupId>
+			<artifactId>multiview-reconstruction</artifactId>
+			<version>${multiview-reconstruction.version}</version>
+		</dependency>
+
+
+		<!-- Test scope dependencies -->
+		<dependency>
+			<!-- NB: dependency:analyze erroneously flags this, but it's required -->
+			<groupId>sc.fiji</groupId>
+			<artifactId>legacy-imglib1</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<!--  copy artifact and dependencies to MM installation -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${micromanager.plugins}</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<artifactItems>
+						<artifactItem>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>${project.artifactId}</artifactId>
+							<version>${project.version}</version>
+							<type>${project.packaging}</type>
+							<overWrite>false</overWrite>
+							<outputDirectory>${micromanager.plugins}</outputDirectory>
+							<destFileName>${project.artifactId}-${project.version}.${project.packaging}</destFileName>
+						</artifactItem>
+					</artifactItems>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
