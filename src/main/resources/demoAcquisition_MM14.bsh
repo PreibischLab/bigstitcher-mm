@@ -1,0 +1,47 @@
+// Simple script for 1.4 to take z-stacks using the FakeCamera
+// See FakeCamera documentation for image naming schemes
+import org.micromanager.api.ImageCache;
+import mmcorej.TaggedImage;
+
+gui.closeAllAcquisitions();
+gui.clearMessageWindow();
+
+// use DCam for now
+mmc.setProperty("Core", "Camera", "DCam");
+//mmc.setProperty("Core", "Camera", "FakeCamera");
+
+nrFrames = 3 ;
+nrSlices = 60;
+acqName = gui.getUniqueAcquisitionName("test");
+rootDirName = "";
+fakeRoot = "/Users/david/Desktop/PollenMovement/t";
+fakeFile = "/pollen-??.tif";
+
+gui.openAcquisition(acqName, rootDirName, nrFrames, 1, nrSlices);
+
+for (int f = 0; f < nrFrames; f++) {
+    fakePath = fakeRoot + (f + 1) + fakeFile;
+    gui.message(fakePath);
+    mmc.setProperty("FakeCamera", "Path mask", fakePath);
+    for (int z = 0; z < nrSlices; z++) {
+        gui.setStagePosition(z);
+        gui.snapAndAddImage(acqName, f, 0, z, 0);
+    }
+    // A full Z-stack is now available
+    // get images as follows:
+    width = gui.getAcquisitionImageHeight(acqName); // only valid after images were added to the acquisition
+    height = gui.getAcquisitionImageHeight(acqName);
+    nrBytes = gui.getAcquisitionImageByteDepth(acqName);
+    ImageCache imgCache = gui.getAcquisitionImageCache(acqName);
+    TaggedImage img = imgCache.getImage(0, 5, f, 0); // channel, slice, frame, position
+    Object pixels = img.pix;
+    tags = img.tags; // JSONObject
+
+    // Note that a listener can be attached to an ImageCache
+   // Note: access to images in 1.4 is through an "Acquisition object".  This is an ill-defined
+   // structure (contained in the internal MMAcquisition, and access is only by name
+   // 2.0 uses a Datastore to which images are added (and images are retrieved from a DataProvider)
+   // in 2.0, objects from the class Images contain information about width, height, etc..
+
+
+}
