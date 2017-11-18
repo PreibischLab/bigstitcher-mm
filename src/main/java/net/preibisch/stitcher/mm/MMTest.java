@@ -105,10 +105,16 @@ public class MMTest
 			{
 				final PlanarImg< UnsignedByteType, ByteArray > img = new PlanarImg< UnsignedByteType, ByteArray >( dim, new UnsignedByteType().getEntitiesPerPixel() );
 
+				// create a Type that is linked to the container
+				final UnsignedByteType linkedType = new UnsignedByteType( img );
+
+				// pass it to the NativeContainer
+				img.setLinkedType( linkedType );
+
 				for ( int z = 0; z < nrSlices; z++ )
 				{
 					// channel, slice, frame, position
-					TaggedImage image = imgCache.getImage( 0, 5, f, 0 );
+					TaggedImage image = imgCache.getImage( 0, z, f, 0 );
 
 					byte[] pixelsPlane = (byte[])image.pix;
 					JSONObject tags = image.tags; // JSONObject
