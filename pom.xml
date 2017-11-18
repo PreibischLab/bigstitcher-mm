@@ -137,40 +137,10 @@
 			<artifactId>multiview-reconstruction</artifactId>
 			<version>${multiview-reconstruction.version}</version>
 		</dependency>
-
-
-		<!--  hacky local MM jars -->
-		<dependency>
-		<groupId>org.micro-manager</groupId>
-			<artifactId>MMJ_</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMJ_.jar</systemPath>
-		</dependency>
-		<dependency>
-		<groupId>org.micro-manager</groupId>
-			<artifactId>MMCoreJ</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMCoreJ.jar</systemPath>
-		</dependency>
-		<dependency>
-		<groupId>org.micro-manager</groupId>
-			<artifactId>MMAcqEngine</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMAcqEngine.jar</systemPath>
-		</dependency>
-
-
-		<dependency>
-			<groupId>bsh</groupId>
-			<artifactId>bsh</artifactId>
-			<version>2.0b4</version>
-		</dependency>
 	</dependencies>
 	
 	<!--  copy artifact and dependencies to MM installation -->
+	<!-- 
 	<build>
 		<plugins>
 			<plugin>
@@ -233,6 +203,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	-->
 	
 
 </project>
