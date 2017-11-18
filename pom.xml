@@ -112,7 +112,7 @@
 		<multiview-simulation.version>0.1.0</multiview-simulation.version>
 		<bigstitcher.version>0.1.1-SNAPSHOT</bigstitcher.version>
 		
-		<micromanager.plugins>/Users/david/Applications/Micro-Manager1.4/plugins/BigStitcher</micromanager.plugins>
+		<micromanager.basedir>/Users/david/Applications/Micro-Manager1.4</micromanager.basedir>
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
 		<releaseProfiles>deploy-to-imagej</releaseProfiles>
@@ -139,12 +139,34 @@
 		</dependency>
 
 
-		<!-- Test scope dependencies -->
+		<!--  hacky local MM jars -->
 		<dependency>
-			<!-- NB: dependency:analyze erroneously flags this, but it's required -->
-			<groupId>sc.fiji</groupId>
-			<artifactId>legacy-imglib1</artifactId>
-			<scope>test</scope>
+		<groupId>org.micro-manager</groupId>
+			<artifactId>MMJ_</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMJ_.jar</systemPath>
+		</dependency>
+		<dependency>
+		<groupId>org.micro-manager</groupId>
+			<artifactId>MMCoreJ</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMCoreJ.jar</systemPath>
+		</dependency>
+		<dependency>
+		<groupId>org.micro-manager</groupId>
+			<artifactId>MMAcqEngine</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${micromanager.basedir}/plugins/Micro-Manager/MMAcqEngine.jar</systemPath>
+		</dependency>
+
+
+		<dependency>
+			<groupId>bsh</groupId>
+			<artifactId>bsh</artifactId>
+			<version>2.0b4</version>
 		</dependency>
 	</dependencies>
 	
@@ -191,7 +213,26 @@
 					</artifactItems>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				<executions>
+					<execution>
+						<id>my-exec</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<inherited>false</inherited>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>java -cp ${micromanager.basedir}/ij.jar ij.Imagej</executable>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+	
 
 </project>
