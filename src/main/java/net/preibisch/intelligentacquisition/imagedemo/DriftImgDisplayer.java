@@ -14,7 +14,7 @@ public class DriftImgDisplayer implements DataListener< Pair<MicDataImpl< Intege
 	private BdvHandle handle;
 
 	@Override
-	public void notifyWithData(Pair< MicDataImpl< Integer >, ? extends List< MicDataImpl< Integer > > > data)
+	public <D extends Pair< MicDataImpl< Integer >, ? extends List< MicDataImpl< Integer > > >> void notifyWithData(D data)
 	{
 		if (handle != null)
 			handle.close();

@@ -18,9 +18,9 @@ public class SimpleToStringDataCollector<D> implements DataTransformer< D, Pair<
 	}
 	
 	@Override
-	public void notifyWithData(D data)
+	public <DS extends D> void notifyWithData(DS data)
 	{
-		Pair< D, String > transformed = new ValuePair<>( data, data.toString() );
+		Pair< D, String > transformed = new ValuePair<>( (D) data, data.toString() );
 		System.out.println( this.getClass().getSimpleName() + ": transformed data (type " + data.getClass().getSimpleName() + ") to String." );
 		for (DataListener< Pair< D, String > > listener : listeners)
 			listener.notifyWithData( transformed );

@@ -2,5 +2,5 @@ package net.preibisch.intelligentacquisition;
 
 public interface DataListener<D>
 {
-	public void notifyWithData(D data);
+	public <DS extends D> void notifyWithData(DS data);
 }

@@ -11,7 +11,7 @@ public class SimplePrintDataListener implements DataListener< Pair<Integer, Stri
 	private Conduit< ?, ? super String > conduit;
 
 	@Override
-	public void notifyWithData(Pair< Integer, String > data)
+	public <D extends Pair< Integer, String >> void notifyWithData(D data)
 	{
 		System.out.println( data.getB() );
 		conduit.postResult( data.getB() );

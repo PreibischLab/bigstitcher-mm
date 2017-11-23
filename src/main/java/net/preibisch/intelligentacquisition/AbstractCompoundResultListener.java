@@ -12,19 +12,19 @@ public abstract class AbstractCompoundResultListener<R> implements ResultListene
 		this.children = new ArrayList<>();
 	}
 
-	public abstract void handleResult(R result);
+	public abstract <RS extends R> void handleResult(RS result);
 
 	@Override
-	public void notifyWithResult(R result)
+	public <RS extends R> void notifyWithResult(RS result)
 	{
 		handleResult( result );
 		for (ResultListener< R > child : children)
 			child.notifyWithResult( result );
 	}
 
-	public void addChild(ResultListener< R > listener)
+	public <RS extends R> void addChild(ResultListener< RS > listener)
 	{
-		this.children.add( listener );
+		this.children.add( (ResultListener< R >) listener );
 	}
 
 }

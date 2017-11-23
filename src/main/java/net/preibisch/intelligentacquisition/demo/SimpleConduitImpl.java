@@ -18,29 +18,29 @@ public class SimpleConduitImpl< D, R > implements Conduit< D, R >
 	}
 
 	@Override
-	public void postData(D data)
+	public synchronized <DS extends D> void postData(DS data)
 	{
 		for (DataListener< D > listener : dataListeners)
 			listener.notifyWithData( data );
 	}
 
 	@Override
-	public void postResult(R response)
+	public synchronized <RS extends R> void postResult(RS response)
 	{
 		for(ResultListener< R > listener : resultListeners)
 			listener.notifyWithResult( response );
 	}
 
 	@Override
-	public void registerDataListener(DataListener< D > analyzer)
+	public synchronized <DS extends D> void registerDataListener(DataListener< DS > analyzer)
 	{
-		dataListeners.add( analyzer );
+		dataListeners.add( (DataListener< D >) analyzer );
 	}
 
 	@Override
-	public void registerResultListener(ResultListener< R > listener)
+	public synchronized <RS extends R> void registerResultListener(ResultListener< RS > listener)
 	{
-		resultListeners.add( listener );
+		resultListeners.add( (ResultListener< R >) listener );
 	}
 
 }

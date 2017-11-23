@@ -7,17 +7,22 @@ import org.micromanager.MMOptions;
 import org.micromanager.MMStudio;
 import org.micromanager.api.ImageCache;
 
+import bdv.util.BdvFunctions;
 import ij.IJ;
 import ij.ImageJ;
 import mmcorej.CMMCore;
 import mmcorej.TaggedImage;
+import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.basictypeaccess.array.ByteArray;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 import net.imglib2.img.imageplus.ImagePlusImg;
 import net.imglib2.img.planar.PlanarImg;
 import net.imglib2.img.planar.PlanarImgs;
 import net.imglib2.multithreading.SimpleMultiThreading;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.preibisch.intelligentacquisition.mmdemo.MicroManagerMicController;
+import net.preibisch.intelligentacquisition.mmdemo.MicroManagerUtils;
 import net.preibisch.stitcher.plugin.BigStitcher;
 
 public class MMTest
@@ -58,6 +63,8 @@ public class MMTest
 		gui.closeAllAcquisitions();
 		gui.clearMessageWindow();
 
+		new MicroManagerMicController( gui );
+
 		if ( fromDisk )
 			mmc.setProperty("Core", "Camera", "FakeCamera");
 		else
@@ -71,6 +78,8 @@ public class MMTest
 		String fakeFile = "/pollen-??.tif";
 
 		gui.openAcquisition( acqName, rootDirName, nrFrames, 1, nrSlices );
+
+		gui.runAcquisition();
 
 		for ( int f = 0; f < nrFrames; f++ )
 		{
@@ -99,35 +108,8 @@ public class MMTest
 			System.out.println( "h=" + height );
 			System.out.println( "bytes=" + nrBytes );
 
-			final long[] dim = new long[]{ width, height, nrSlices };
-
-			if ( nrBytes == 1 )
-			{
-				final PlanarImg< UnsignedByteType, ByteArray > img = new PlanarImg< UnsignedByteType, ByteArray >( dim, new UnsignedByteType().getEntitiesPerPixel() );
-
-				// create a Type that is linked to the container
-				final UnsignedByteType linkedType = new UnsignedByteType( img );
-
-				// pass it to the NativeContainer
-				img.setLinkedType( linkedType );
-
-				for ( int z = 0; z < nrSlices; z++ )
-				{
-					// channel, slice, frame, position
-					TaggedImage image = imgCache.getImage( 0, z, f, 0 );
-
-					byte[] pixelsPlane = (byte[])image.pix;
-					JSONObject tags = image.tags; // JSONObject
-
-					img.setPlane( z, new ByteArray( pixelsPlane ) );
-				}
-
-				ImageJFunctions.show( img );
-			}
-			else
-			{
-				
-			}
+			RandomAccessibleInterval< ? extends RealType<?> > mmImg = MicroManagerUtils.wrapMMAcquisition( gui.getAcquisitionWithName( acqName ), f, 0, 0 );
+			//BdvFunctions.show( mmImg, "BDV" );
 
 			/*
 			// channel, slice, frame, position
@@ -168,7 +150,7 @@ public class MMTest
 			// in 2.0, objects from the class Images contain information about
 			// width, height, etc..
 			 */
-			SimpleMultiThreading.threadHaltUnClean();
+			//SimpleMultiThreading.threadHaltUnClean();
 		}
 
 		

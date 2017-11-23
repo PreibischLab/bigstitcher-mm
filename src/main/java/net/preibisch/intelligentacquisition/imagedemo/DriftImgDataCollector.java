@@ -21,11 +21,11 @@ public class DriftImgDataCollector implements DataTransformer< MicDataImpl< Inte
 	}
 
 	@Override
-	public void notifyWithData(MicDataImpl< Integer > data)
+	public <D extends MicDataImpl< Integer >> void notifyWithData(D data)
 	{
 		imgs.add( data );
 		System.out.println( "Collected data, in list: " + imgs.size() );
-		ValuePair<MicDataImpl< Integer >, ArrayList< MicDataImpl< Integer > > > res = new ValuePair<>( data, imgs );
+		ValuePair<MicDataImpl< Integer >, ArrayList< MicDataImpl< Integer > > > res = new ValuePair<>( (MicDataImpl< Integer >) data, imgs );
 		for (DataListener< Pair< MicDataImpl< Integer >, ? extends List< MicDataImpl< Integer > > > > listener : listeners)
 			listener.notifyWithData( res );
 	}
