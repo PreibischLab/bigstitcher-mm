@@ -21,6 +21,11 @@ import net.imglib2.img.planar.PlanarImgs;
 import net.imglib2.multithreading.SimpleMultiThreading;
 import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.integer.UnsignedByteType;
+import net.preibisch.intelligentacquisition.demo.SimpleConduitImpl;
+import net.preibisch.intelligentacquisition.imagedemo.DriftImgCorrector;
+import net.preibisch.intelligentacquisition.imagedemo.DriftImgDataCollector;
+import net.preibisch.intelligentacquisition.imagedemo.DriftImgDisplayer;
+import net.preibisch.intelligentacquisition.imagedemo.MicDataImpl;
 import net.preibisch.intelligentacquisition.mmdemo.MicroManagerMicController;
 import net.preibisch.intelligentacquisition.mmdemo.MicroManagerUtils;
 import net.preibisch.stitcher.plugin.BigStitcher;
@@ -30,7 +35,7 @@ public class MMTest
 	public static void main(String[] args)
 	{
 		new ImageJ();
-		new BigStitcher().run();
+		//new BigStitcher().run();
 		
 		boolean runScript = false;
 		
@@ -47,6 +52,20 @@ public class MMTest
 		
 		CMMCore core = mm.getCore();
 		
+		MicroManagerMicController controller = new MicroManagerMicController( mm );
+		SimpleConduitImpl< MicDataImpl< Integer >, Object > conduit = new SimpleConduitImpl<MicDataImpl< Integer >, Object>();
+		controller.setCondiuit( conduit );
+
+		conduit.registerResultListener( controller );
+		final DriftImgDataCollector dataCollector = new DriftImgDataCollector();
+		final DriftImgDisplayer displayer = new DriftImgDisplayer();
+		final DriftImgCorrector corrector = new DriftImgCorrector();
+		dataCollector.addChild( displayer );
+		dataCollector.addChild( corrector );
+		corrector.setCondiuit( conduit );
+		conduit.registerDataListener( dataCollector );
+		
+		/*
 		try
 		{
 			doAcquisition( mm, core, false );
@@ -56,6 +75,7 @@ public class MMTest
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public static void doAcquisition( final MMStudio gui, final CMMCore mmc, final boolean fromDisk ) throws Exception
@@ -63,7 +83,6 @@ public class MMTest
 		gui.closeAllAcquisitions();
 		gui.clearMessageWindow();
 
-		new MicroManagerMicController( gui );
 
 		if ( fromDisk )
 			mmc.setProperty("Core", "Camera", "FakeCamera");
@@ -79,7 +98,7 @@ public class MMTest
 
 		gui.openAcquisition( acqName, rootDirName, nrFrames, 1, nrSlices );
 
-		gui.runAcquisition();
+		//gui.runAcquisition();
 
 		for ( int f = 0; f < nrFrames; f++ )
 		{

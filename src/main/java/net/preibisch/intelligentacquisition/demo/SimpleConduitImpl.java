@@ -20,6 +20,7 @@ public class SimpleConduitImpl< D, R > implements Conduit< D, R >
 	@Override
 	public synchronized <DS extends D> void postData(DS data)
 	{
+		System.out.println( "Data posted" );
 		for (DataListener< D > listener : dataListeners)
 			listener.notifyWithData( data );
 	}
