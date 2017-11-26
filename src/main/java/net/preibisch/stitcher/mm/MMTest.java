@@ -26,6 +26,7 @@ import net.preibisch.intelligentacquisition.imagedemo.DriftImgCorrector;
 import net.preibisch.intelligentacquisition.imagedemo.DriftImgDataCollector;
 import net.preibisch.intelligentacquisition.imagedemo.DriftImgDisplayer;
 import net.preibisch.intelligentacquisition.imagedemo.MicDataImpl;
+import net.preibisch.intelligentacquisition.mmdemo.MicroManagerDriftResultHandler;
 import net.preibisch.intelligentacquisition.mmdemo.MicroManagerMicController;
 import net.preibisch.intelligentacquisition.mmdemo.MicroManagerUtils;
 import net.preibisch.stitcher.plugin.BigStitcher;
@@ -36,25 +37,26 @@ public class MMTest
 	{
 		new ImageJ();
 		//new BigStitcher().run();
-		
+
 		boolean runScript = false;
-		
+
 		final MMOptions options = new MMOptions();
 		options.loadSettings();
 		options.doNotAskForConfigFile_ = true;
 		options.startupScript_ = runScript ? MMTest.class.getResource( "/demoAcquisition_MM14.bsh" ).getFile() : "";
 		options.saveSettings();
-		
+
 		MMStudio mm = new MMStudio( false );
 		IJ.log( mm.getSysConfigFile() );
 		mm.setSysConfigFile( MMTest.class.getResource( "/testConfig.cfg" ).getFile() );
 		mm.setConfigChanged( true );
-		
+
 		CMMCore core = mm.getCore();
-		
+
 		MicroManagerMicController controller = new MicroManagerMicController( mm );
 		SimpleConduitImpl< MicDataImpl< Integer >, Object > conduit = new SimpleConduitImpl<MicDataImpl< Integer >, Object>();
 		controller.setCondiuit( conduit );
+		controller.addChild( new MicroManagerDriftResultHandler( core ) );
 
 		conduit.registerResultListener( controller );
 		final DriftImgDataCollector dataCollector = new DriftImgDataCollector();
@@ -62,9 +64,9 @@ public class MMTest
 		final DriftImgCorrector corrector = new DriftImgCorrector();
 		dataCollector.addChild( displayer );
 		dataCollector.addChild( corrector );
-		corrector.setCondiuit( conduit );
+		corrector.setConduit( conduit );
 		conduit.registerDataListener( dataCollector );
-		
+
 		/*
 		try
 		{
@@ -127,7 +129,7 @@ public class MMTest
 			System.out.println( "h=" + height );
 			System.out.println( "bytes=" + nrBytes );
 
-			RandomAccessibleInterval< ? extends RealType<?> > mmImg = MicroManagerUtils.wrapMMAcquisition( gui.getAcquisitionWithName( acqName ), f, 0, 0 );
+			RandomAccessibleInterval< ?  > mmImg = MicroManagerUtils.wrapMMAcquisition( gui.getAcquisitionWithName( acqName ), f, 0, 0 );
 			//BdvFunctions.show( mmImg, "BDV" );
 
 			/*

@@ -31,7 +31,7 @@ public class DriftImgCorrector implements DataListener< Pair<MicDataImpl< Intege
 	private ExecutorService service = Executors.newFixedThreadPool( Runtime.getRuntime().availableProcessors() );
 
 	@Override
-	public void setCondiuit(Conduit< ?, ? super AffineGet > conduit)
+	public void setConduit(Conduit< ?, ? super AffineGet > conduit)
 	{
 		this.conduit = conduit;
 	}

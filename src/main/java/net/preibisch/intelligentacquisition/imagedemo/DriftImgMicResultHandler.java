@@ -24,7 +24,7 @@ public class DriftImgMicResultHandler implements MicResultHandler< AffineGet >
 	}
 
 	@Override
-	public void setCondiuit(Conduit< ?, ? super AffineGet > conduit)
+	public void setConduit(Conduit< ?, ? super AffineGet > conduit)
 	{
 		this.conduit = conduit;
 	}

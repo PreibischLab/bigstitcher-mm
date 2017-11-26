@@ -20,7 +20,7 @@ public class SimpleMicResultHandler implements MicResultHandler< String >
 	}
 
 	@Override
-	public void setCondiuit(Conduit< ?, ? super String > conduit)
+	public void setConduit(Conduit< ?, ? super String > conduit)
 	{
 		// TODO Auto-generated method stub
 		

@@ -18,7 +18,7 @@ public class SimplePrintDataListener implements DataListener< Pair<Integer, Stri
 	}
 
 	@Override
-	public void setCondiuit(Conduit< ?, ? super String > conduit)
+	public void setConduit(Conduit< ?, ? super String > conduit)
 	{
 		this.conduit = conduit;
 	}

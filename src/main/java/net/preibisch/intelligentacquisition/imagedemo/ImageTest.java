@@ -18,14 +18,14 @@ public class ImageTest
 		final DriftImgMicResultHandler micResultHandler = new DriftImgMicResultHandler( micController.getImageGenerator() );
 		micController.addChild( micResultHandler );
 		micController.setCondiuit( conduit );
-		micResultHandler.setCondiuit( conduit );
+		micResultHandler.setConduit( conduit );
 		conduit.registerResultListener( micController );
 		final DriftImgDataCollector dataCollector = new DriftImgDataCollector();
 		final DriftImgDisplayer displayer = new DriftImgDisplayer();
 		final DriftImgCorrector corrector = new DriftImgCorrector();
 		dataCollector.addChild( displayer );
 		dataCollector.addChild( corrector );
-		corrector.setCondiuit( conduit );
+		corrector.setConduit( conduit );
 		conduit.registerDataListener( dataCollector );
 		
 		conduit.registerResultListener( new ResultListener< EuclideanSpace >()

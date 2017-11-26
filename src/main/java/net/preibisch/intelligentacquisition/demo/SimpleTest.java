@@ -21,7 +21,7 @@ public class SimpleTest
 		final SimpleToStringDataCollector< Integer > collector = new SimpleToStringDataCollector<>();
 		final SimplePrintDataListener printer = new SimplePrintDataListener();
 		collector.addChild( printer );
-		printer.setCondiuit( conduit );
+		printer.setConduit( conduit );
 
 		conduit.registerDataListener( collector );
 
