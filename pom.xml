@@ -116,6 +116,9 @@
 
 		<!-- NB: Deploy releases to the ImageJ Maven repository. -->
 		<releaseProfiles>deploy-to-imagej</releaseProfiles>
+
+		<!--  FIXME: skip enforcer for now -->
+		<enforcer.skip>true</enforcer.skip>
 		
 	</properties>
 
